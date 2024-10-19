@@ -12,11 +12,11 @@ import javafx.stage.Stage;
 
 import java.util.Random;
 
-public class TicTacToe extends Application {
+public class SinglePlayerMode extends Application {
     private boolean isXTurn = true;
     private Button[][] buttons = new Button[3][3];
     private Label statusLabel;
-    private boolean isAITurn = false; // Flag to check if it's AI's turn
+    private boolean isAITurn = false;
 
     @Override
     public void start(Stage primaryStage) {
@@ -93,7 +93,7 @@ public class TicTacToe extends Application {
             return new int[][] {{0, 2}, {1, 1}, {2, 0}}; // Anti-diagonal
         }
 
-        return null; // No winner found
+        return null;
     }
 
     private void handleButtonClick(int r, int c) {
@@ -110,7 +110,7 @@ public class TicTacToe extends Application {
                 disableButtons();
             } else {
                 isXTurn = !isXTurn;
-                isAITurn = !isAITurn; // Switch to AI's turn
+                isAITurn = !isAITurn;
                 statusLabel.setText(isXTurn ? "Player X's Turn" : "AI's Turn");
                 if (isAITurn) {
                     makeAIMove();
@@ -126,9 +126,9 @@ public class TicTacToe extends Application {
         do {
             aiRow = random.nextInt(3);
             aiCol = random.nextInt(3);
-        } while (!buttons[aiRow][aiCol].getText().isEmpty()); // Ensure the chosen button is empty
+        } while (!buttons[aiRow][aiCol].getText().isEmpty());
 
-        buttons[aiRow][aiCol].setText("O"); // Assuming AI plays as "O"
+        buttons[aiRow][aiCol].setText("O");
 
         int[][] winningCombination = checkWinner();
         if (winningCombination != null) {
@@ -140,7 +140,7 @@ public class TicTacToe extends Application {
             disableButtons();
         } else {
             isXTurn = !isXTurn;
-            isAITurn = !isAITurn; // Switch back to player's turn
+            isAITurn = !isAITurn;
             statusLabel.setText(isXTurn ? "Player X's Turn" : "AI's Turn");
         }
     }
@@ -179,7 +179,7 @@ public class TicTacToe extends Application {
             }
         }
         isXTurn = true;
-        isAITurn = false; // Reset AI turn flag
+        isAITurn = false;
         statusLabel.setText("Player X's Turn");
     }
 

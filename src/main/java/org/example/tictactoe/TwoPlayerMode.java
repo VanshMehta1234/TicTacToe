@@ -10,13 +10,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.Random;
-
-public class TicTacToe extends Application {
+public class TwoPlayerMode extends Application {
     private boolean isXTurn = true;
     private Button[][] buttons = new Button[3][3];
     private Label statusLabel;
-    private boolean isAITurn = false; // Flag to check if it's AI's turn
 
     @Override
     public void start(Stage primaryStage) {
@@ -60,7 +57,7 @@ public class TicTacToe extends Application {
 
         Scene scene = new Scene(vbox, 320, 400);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Tic-Tac-Toe");
+        primaryStage.setTitle("Two Player Tic-Tac-Toe");
         primaryStage.show();
     }
 
@@ -93,46 +90,17 @@ public class TicTacToe extends Application {
             return new int[][] {{0, 2}, {1, 1}, {2, 0}}; // Anti-diagonal
         }
 
-        return null; // No winner found
+        return null;
     }
 
     private void handleButtonClick(int r, int c) {
-        if (buttons[r][c].getText().isEmpty() && !isAITurn) {
+        if (buttons[r][c].getText().isEmpty()) {
             buttons[r][c].setText(isXTurn ? "X" : "O");
-
-            int[][] winningCombination = checkWinner();
-            if (winningCombination != null) {
-                statusLabel.setText(isXTurn ? "X wins!" : "O wins!");
-                highlightWinningCombination(winningCombination);
-                disableButtons();
-            } else if (isDraw()) {
-                statusLabel.setText("It's a draw!");
-                disableButtons();
-            } else {
-                isXTurn = !isXTurn;
-                isAITurn = !isAITurn; // Switch to AI's turn
-                statusLabel.setText(isXTurn ? "Player X's Turn" : "AI's Turn");
-                if (isAITurn) {
-                    makeAIMove();
-                }
-            }
         }
-    }
-
-    private void makeAIMove() {
-        Random random = new Random();
-        int aiRow, aiCol;
-
-        do {
-            aiRow = random.nextInt(3);
-            aiCol = random.nextInt(3);
-        } while (!buttons[aiRow][aiCol].getText().isEmpty()); // Ensure the chosen button is empty
-
-        buttons[aiRow][aiCol].setText("O"); // Assuming AI plays as "O"
 
         int[][] winningCombination = checkWinner();
         if (winningCombination != null) {
-            statusLabel.setText("O wins!");
+            statusLabel.setText(isXTurn ? "X wins!" : "O wins!");
             highlightWinningCombination(winningCombination);
             disableButtons();
         } else if (isDraw()) {
@@ -140,14 +108,13 @@ public class TicTacToe extends Application {
             disableButtons();
         } else {
             isXTurn = !isXTurn;
-            isAITurn = !isAITurn; // Switch back to player's turn
-            statusLabel.setText(isXTurn ? "Player X's Turn" : "AI's Turn");
+            statusLabel.setText(isXTurn ? "Player X's Turn" : "Player O's Turn");
         }
     }
 
     private void highlightWinningCombination(int[][] winningCombination) {
         for (int[] pos : winningCombination) {
-            buttons[pos[0]][pos[1]].setStyle("-fx-background-color: #90EE90; -fx-font-size: 24;");
+            buttons[pos[0]][pos[1]].setStyle("-fx-background-color: lightgreen; -fx-font-size: 24;"); // Highlight the winning buttons
         }
     }
 
@@ -175,11 +142,9 @@ public class TicTacToe extends Application {
             for (int col = 0; col < 3; col++) {
                 buttons[row][col].setText("");
                 buttons[row][col].setDisable(false);
-                buttons[row][col].setStyle("-fx-font-size: 24; -fx-background-color: lightblue;");
             }
         }
         isXTurn = true;
-        isAITurn = false; // Reset AI turn flag
         statusLabel.setText("Player X's Turn");
     }
 
