@@ -1,10 +1,12 @@
 package org.example.tictactoe;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -15,16 +17,23 @@ public class TicTacToe extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        VBox vbox = new VBox();
-        statusLabel = new Label("X's Turn");
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(15));
+
+        statusLabel = new Label("Player X's Turn");
+        statusLabel.setStyle("-fx-font-size: 18");
         vbox.getChildren().add(statusLabel);
 
         GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10));
+        grid.setHgap(10);
+        grid.setVgap(10);
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 buttons[row][col] = new Button("");
                 buttons[row][col].setPrefSize(100, 100);
+                buttons[row][col].setStyle("-fx-font-size: 24; -fx-background-color: lightblue;");
 
                 final int r = row;
                 final int c = col;
@@ -35,7 +44,18 @@ public class TicTacToe extends Application {
         }
 
         vbox.getChildren().add(grid);
-        Scene scene = new Scene(vbox, 300, 350);
+
+        Button resetButton = new Button("Reset Game");
+        resetButton.setStyle("-fx-font-size: 16; -fx-background-color: lightcoral;");
+        resetButton.setOnAction(e -> resetGame());
+
+        HBox hbox = new HBox(resetButton);
+        hbox.setPadding(new Insets(10));
+        hbox.setSpacing(10);
+
+        vbox.getChildren().add(hbox);
+
+        Scene scene = new Scene(vbox, 320, 400);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Tic-Tac-Toe");
         primaryStage.show();
@@ -47,18 +67,17 @@ public class TicTacToe extends Application {
         }
 
         if (checkWinner()) {
-            statusLabel.setText(isXTurn ? "X" : "O" + " wins!");
+            statusLabel.setText(isXTurn ? "Player X Wins!" : "Player O Wins!");
             disableButtons();
         } else if (isDraw()) {
-            statusLabel.setText("It's a draw!");
+            statusLabel.setText("It's a Draw!");
             disableButtons();
         } else {
             isXTurn = !isXTurn;
-            statusLabel.setText(isXTurn ? "X's Turn" : "O's Turn");
+            statusLabel.setText(isXTurn ? "Player X's Turn" : "Player O's Turn");
         }
     }
 
-    // Disable all buttons after the game ends
     private void disableButtons() {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
@@ -108,6 +127,17 @@ public class TicTacToe extends Application {
         }
 
         return false;
+    }
+
+    private void resetGame() {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                buttons[row][col].setText("");
+                buttons[row][col].setDisable(false);
+            }
+        }
+        isXTurn = true;
+        statusLabel.setText("Player X's Turn");
     }
 
     public static void main(String[] args) {
