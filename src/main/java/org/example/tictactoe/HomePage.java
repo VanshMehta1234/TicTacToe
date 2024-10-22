@@ -55,7 +55,23 @@ public class HomePage extends Application {
             }
         });
 
-        vbox.getChildren().addAll(title, singlePlayerButton, twoPlayerButton);
+        Button multiplayerButton = new Button("Multiplayer");
+        multiplayerButton.setPrefSize(250, 70);
+        multiplayerButton.setStyle("-fx-font-size: 22; -fx-background-color: #333333; "
+                + "-fx-text-fill: white; -fx-background-radius: 10; -fx-border-color: #AAAAAA; "
+                + "-fx-border-width: 2; -fx-border-radius: 10;");
+        multiplayerButton.setOnAction(e -> {
+            MultiplayerClient multiplayerClient = new MultiplayerClient();
+            try {
+                multiplayerClient.start(new Stage());
+                primaryStage.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+
+        vbox.getChildren().addAll(title, singlePlayerButton, twoPlayerButton,multiplayerButton);
 
         Scene scene = new Scene(vbox, 500, 600); // Set consistent scene size
         primaryStage.setTitle("Tic-Tac-Toe Home");
